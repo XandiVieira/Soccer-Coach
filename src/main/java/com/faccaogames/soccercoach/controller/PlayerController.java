@@ -14,8 +14,8 @@ public class PlayerController {
     @Autowired
     private PlayerService playerService;
 
-    @GetMapping(path = "{playerId}")
-    public Player getPlayer(Long id) {
+    @GetMapping(value = "/{id}")
+    public Player getPlayer(@PathVariable("id") final Long id) {
         return playerService.retrievePlayerById(id);
     }
 
@@ -29,4 +29,13 @@ public class PlayerController {
         playerService.createPlayer(player);
     }
 
+    @DeleteMapping(value = "/{id}")
+    public void deletePlayer(@PathVariable("id") final Long id) {
+        playerService.deletePlayer(id);
+    }
+
+    @PutMapping(value = "/{id}")
+    public void editPlayer(@PathVariable("id") final Long id, @RequestBody Player player){
+        playerService.updatePlayer(id, player);
+    }
 }

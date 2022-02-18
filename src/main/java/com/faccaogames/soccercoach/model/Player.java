@@ -1,5 +1,6 @@
 package com.faccaogames.soccercoach.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.time.Period;
 @Data
 @Entity
 @Table
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Player {
 
     @Id
@@ -34,13 +36,12 @@ public class Player {
     @Transient
     private Integer age;
 
-    public Player(String firstName, String lastName, String position, LocalDate dateOfBirth, Long teamId, Integer age) {
+    public Player(String firstName, String lastName, String position, LocalDate dateOfBirth, Long teamId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.position = position;
         this.dateOfBirth = dateOfBirth;
         this.teamId = teamId;
-        this.age = age;
     }
 
     public Player(String firstName, String lastName, String position, LocalDate dateOfBirth) {
