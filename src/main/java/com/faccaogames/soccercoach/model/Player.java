@@ -1,13 +1,12 @@
 package com.faccaogames.soccercoach.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.Period;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
@@ -28,15 +27,30 @@ public class Player {
     private String firstName;
     private String lastName;
     private String position;
-    private Integer age;
     private LocalDate dateOfBirth;
     //private Skill skills;
     private Long teamId;
 
-    public Player(String firstName, String lastName, String position, Integer age) {
+    @Transient
+    private Integer age;
+
+    public Player(String firstName, String lastName, String position, LocalDate dateOfBirth, Long teamId, Integer age) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.position = position;
+        this.dateOfBirth = dateOfBirth;
+        this.teamId = teamId;
         this.age = age;
+    }
+
+    public Player(String firstName, String lastName, String position, LocalDate dateOfBirth) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.position = position;
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public Integer getAge() {
+        return Period.between(this.dateOfBirth, LocalDate.now()).getYears();
     }
 }

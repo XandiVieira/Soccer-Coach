@@ -2,10 +2,8 @@ package com.faccaogames.soccercoach.controller;
 
 import com.faccaogames.soccercoach.model.Player;
 import com.faccaogames.soccercoach.service.PlayerService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -13,6 +11,7 @@ import java.util.List;
 @RequestMapping(path = "api/v1/player")
 public class PlayerController {
 
+    @Autowired
     private PlayerService playerService;
 
     @GetMapping(path = "{playerId}")
@@ -26,7 +25,7 @@ public class PlayerController {
     }
 
     @PostMapping
-    public void createPlayer(Player player) {
+    public void createPlayer(@RequestBody Player player) {
         playerService.createPlayer(player);
     }
 
