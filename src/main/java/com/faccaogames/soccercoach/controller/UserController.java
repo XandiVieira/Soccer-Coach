@@ -17,23 +17,23 @@ public class UserController {
         userService.createUser(user);
     }
 
-    @GetMapping("/{id}")
-    public User getUserById(@PathVariable("id") Long id) {
+    @GetMapping(value = "/{id}")
+    public User getUserById(@PathVariable("id") final Long id) {
         return userService.retrieveUserById(id);
     }
 
-    @GetMapping("/{email}")
-    public User getUserById(@PathVariable("email") String email) {
+    @GetMapping
+    public User getUserByEmail(@RequestParam final String email) {
         return userService.retrieveUserByEmail(email);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable("id") Long id) {
+    public void deleteUser(@PathVariable("id") final Long id) {
         userService.deleteUser(id);
     }
 
     @PutMapping("/{id}")
-    public void editUser(@RequestBody User user, @PathVariable("id") Long id) {
+    public void editUser(@RequestBody User user, @PathVariable("id") final Long id) {
         userService.updateUser(user, id);
     }
 }
