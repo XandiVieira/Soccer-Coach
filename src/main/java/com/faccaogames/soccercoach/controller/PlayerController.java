@@ -25,17 +25,22 @@ public class PlayerController {
     }
 
     @PostMapping
-    public void createPlayer(@RequestBody Player player) {
-        playerService.createPlayer(player);
+    public Long createPlayer(@RequestBody Player player) {
+        return playerService.createPlayer(player);
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deletePlayer(@PathVariable("id") final Long id) {
-        playerService.deletePlayer(id);
+    public String deletePlayer(@PathVariable("id") final Long id) {
+        return playerService.deletePlayer(id);
     }
 
     @PutMapping(value = "/{id}")
-    public void editPlayer(@PathVariable("id") final Long id, @RequestBody Player player){
-        playerService.updatePlayer(id, player);
+    public Long editPlayer(@PathVariable("id") final Long id, @RequestBody Player player) {
+        return playerService.updatePlayer(id, player);
+    }
+
+    @PutMapping(value = "/{id}/{teamId}")
+    public void transferPlayer(@PathVariable("id") final Long id, @PathVariable("teamId") final long teamId) {
+        playerService.transferPlayer(id, teamId);
     }
 }

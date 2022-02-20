@@ -25,17 +25,17 @@ public class TeamController {
     }
 
     @PostMapping
-    public void createTeam(@RequestBody Team team) {
-        teamService.createTeam(team);
+    public Long createTeam(@RequestBody Team team) {
+        return teamService.createTeam(team);
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteTeam(@PathVariable("id") final Long id) {
-        teamService.deleteTeam(id);
+    public String deleteTeam(@PathVariable("id") final Long id) {
+        return teamService.deleteTeam(id);
     }
 
     @PutMapping(value = "/{id}")
-    public void editTeam(@PathVariable("id") final Long id, @RequestBody Team team) {
-        teamService.updateTeam(id, team);
+    public Long editTeam(@PathVariable("id") final Long id, @RequestBody Team team) {
+        return teamService.updateTeam(id, team);
     }
 }

@@ -13,8 +13,8 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public void createUser(@RequestBody User user) {
-        userService.createUser(user);
+    public Long createUser(@RequestBody User user) {
+        return userService.createUser(user);
     }
 
     @GetMapping(value = "/{id}")
@@ -28,12 +28,12 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable("id") final Long id) {
-        userService.deleteUser(id);
+    public String deleteUser(@PathVariable("id") final Long id) {
+        return userService.deleteUser(id);
     }
 
     @PutMapping("/{id}")
-    public void editUser(@RequestBody User user, @PathVariable("id") final Long id) {
-        userService.updateUser(user, id);
+    public Long editUser(@RequestBody User user, @PathVariable("id") final Long id) {
+        return userService.updateUser(user, id);
     }
 }

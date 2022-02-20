@@ -1,5 +1,6 @@
 package com.faccaogames.soccercoach.service;
 
+import com.faccaogames.soccercoach.exception.ApiRequestException;
 import com.faccaogames.soccercoach.model.Team;
 import com.faccaogames.soccercoach.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,24 +18,41 @@ public class TeamService {
         this.teamRepository = teamRepository;
     }
 
-    public void createTeam(Team team) {
-        teamRepository.save(team);
+    public Long createTeam(Team team) {
+        return teamRepository.save(team).getId();
     }
 
     public List<Team> retrieveAllTeams() {
-        return teamRepository.findAll();
+        if (teamRepository.count() > 0) {
+            return teamRepository.findAll();
+        } else {
+            throw new ApiRequestException("No teams were found.");
+        }
     }
 
     public Team retrieveTeamById(Long id) {
-        return teamRepository.getById(id);
+        if (teamRepository.existsById(id)) {
+            return teamRepository.getById(id);
+        } else {
+            throw new ApiRequestException("Team with id " + id + " not found.");
+        }
     }
 
-    public void deleteTeam(Long id) {
-        teamRepository.deleteById(id);
+    public String deleteTeam(Long id) {
+        if (teamRepository.existsById(id)) {
+            teamRepository.deleteById(id);
+            return "Team " + id + " was deleted.";
+        } else {
+            throw new ApiRequestException("Team with id " + id + " not found.");
+        }
     }
 
-    public void updateTeam(Long id, Team team) {
-        team.setId(id);
-        teamRepository.save(team);
+    public Long updateTeam(Long id, Team team) {
+        if (teamRepository.existsById(id)) {
+            team.setId(id);
+            return teamRepository.save(team).getId();
+        } else {
+            throw new ApiRequestException("Team with id " + id + " not found.");
+        }
     }
 }
