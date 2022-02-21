@@ -22,7 +22,9 @@ public class PlayerService {
     }
 
     public Long createPlayer(Player player) {
-        return playerRepository.save(player).getId();
+        Long id = playerRepository.save(player).getId();
+        transferPlayer(player.getId(), player.getTeamId());
+        return id;
     }
 
     public List<Player> retrieveAllPlayers() {
@@ -69,11 +71,14 @@ public class PlayerService {
     }
 
     private void updateTeams(Team currentTeam, Team team, Player player) {
-
+        team.getPlayers().add(player);
+        currentTeam.getPlayers().removeIf(player1 -> player1.getId().equals(player.getId()));
+        teamService.updateTeam(currentTeam.getId(), currentTeam);
+        teamService.updateTeam(team.getId(), team);
     }
 
     private void doTransfer(Player player, long teamId) {
         player.setTeamId(teamId);
-        updatePlayer(player.getId(), player);
+        playerRepository.save(player);
     }
 }
