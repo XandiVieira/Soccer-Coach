@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,8 +31,16 @@ public class Team {
     private String name;
     private String country;
     private String coachName;
-    //private List<Player> players;
-    //private List<Match> matches;
+
+    @JoinColumn(name = "player_id", referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Player> players;
+
+    @JoinTable(name = "matches_teams",
+            joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "match_id", referencedColumnName = "id"))
+    @ManyToMany
+    private Set<Match> matches;
 
     public Team(String name, String country, String coachName) {
         this.name = name;

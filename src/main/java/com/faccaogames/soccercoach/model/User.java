@@ -29,6 +29,7 @@ public class User {
     private String email;
     private String password;
     private String username;
+
     private Long currentTeamId;
     private Double cash;
 
