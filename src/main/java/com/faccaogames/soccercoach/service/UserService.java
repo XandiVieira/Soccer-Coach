@@ -18,8 +18,10 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Long createUser(User user) {
-        return userRepository.save(user).getId();
+    public User createUser(User user) {
+         user.setId(userRepository.save(user).getId());
+         return  user;
+
     }
 
     public User retrieveUserById(Long id) {
