@@ -1,6 +1,7 @@
 package com.faccaogames.soccercoach.service;
 
 import com.faccaogames.soccercoach.exception.ApiRequestException;
+import com.faccaogames.soccercoach.model.Player;
 import com.faccaogames.soccercoach.model.Team;
 import com.faccaogames.soccercoach.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,5 +55,14 @@ public class TeamService {
         } else {
             throw new ApiRequestException("Team with id " + id + " not found.");
         }
+    }
+
+    public void updateTeamPlayers(Team teamFrom, Team teamTo, Player player) {
+        teamTo.getPlayers().add(player);
+        if (teamFrom != null) {
+            teamFrom.getPlayers().removeIf(player1 -> player1.getId().equals(player.getId()));
+            updateTeam(teamFrom.getId(), teamFrom);
+        }
+        updateTeam(teamTo.getId(), teamTo);
     }
 }

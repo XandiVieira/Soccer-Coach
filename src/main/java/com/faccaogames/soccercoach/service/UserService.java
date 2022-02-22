@@ -3,6 +3,7 @@ package com.faccaogames.soccercoach.service;
 import com.faccaogames.soccercoach.exception.ApiRequestException;
 import com.faccaogames.soccercoach.model.User;
 import com.faccaogames.soccercoach.repository.UserRepository;
+import com.faccaogames.soccercoach.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,9 @@ public class UserService {
     }
 
     public User createUser(User user) {
-         user.setId(userRepository.save(user).getId());
-         return  user;
-
+        user.setId(userRepository.save(user).getId());
+        user.setCash(Constants.initialCash);
+        return user;
     }
 
     public User retrieveUserById(Long id) {

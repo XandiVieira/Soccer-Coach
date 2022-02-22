@@ -13,10 +13,16 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/index")
+    public String index(Model model) {
+        model.addAttribute("user", new User());
+        return "index";
+    }
+
     @PostMapping("/createuser")
     public String createUser(@ModelAttribute User user, Model model) {
-        model.addAttribute("user",userService.createUser(user));
-        return  "index";
+        model.addAttribute("user", userService.createUser(user));
+        return "index";
     }
 
     @GetMapping(value = "/{id}")

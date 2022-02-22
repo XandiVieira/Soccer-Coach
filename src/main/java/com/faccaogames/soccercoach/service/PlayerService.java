@@ -61,9 +61,12 @@ public class PlayerService {
         }
     }
 
-    public void transferPlayer(Long id, long teamId) {
+    public void transferPlayer(Long id, Long teamId) {
         Player player = playerRepository.getById(id);
-        Team currentTeam = teamService.retrieveTeamById(player.getTeamId());
+        Team currentTeam = null;
+        if (!player.getTeamId().equals(teamId)) {
+            currentTeam = teamService.retrieveTeamById(player.getTeamId());
+        }
         Team team = teamService.retrieveTeamById(teamId);
 
         doTransfer(player, teamId);
@@ -71,13 +74,10 @@ public class PlayerService {
     }
 
     private void updateTeams(Team currentTeam, Team team, Player player) {
-        team.getPlayers().add(player);
-        currentTeam.getPlayers().removeIf(player1 -> player1.getId().equals(player.getId()));
-        teamService.updateTeam(currentTeam.getId(), currentTeam);
-        teamService.updateTeam(team.getId(), team);
+        teamService.updateTeamPlayers(currentTeam, team, player);
     }
 
-    private void doTransfer(Player player, long teamId) {
+    private void doTransfer(Player player, Long teamId) {
         player.setTeamId(teamId);
         playerRepository.save(player);
     }
