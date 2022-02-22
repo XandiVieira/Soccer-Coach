@@ -3,6 +3,7 @@ package com.faccaogames.soccercoach.controller;
 import com.faccaogames.soccercoach.model.User;
 import com.faccaogames.soccercoach.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,9 +13,10 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping
-    public Long createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    @PostMapping("/createuser")
+    public String createUser(@ModelAttribute User user, Model model) {
+        model.addAttribute("user",userService.createUser(user));
+        return  "index";
     }
 
     @GetMapping(value = "/{id}")
