@@ -30,7 +30,7 @@ public class Team {
     private Long id;
     private String name;
     private String country;
-    private String coachName;
+    private Long userId;
 
     @JoinColumn(name = "player_id", referencedColumnName = "id")
     @OneToMany(cascade = CascadeType.ALL)
@@ -42,9 +42,14 @@ public class Team {
     @ManyToMany
     private Set<Match> matches;
 
-    public Team(String name, String country, String coachName) {
+    public Team(String name, String country, Long userId) {
         this.name = name;
         this.country = country;
-        this.coachName = coachName;
+        this.userId = userId;
+    }
+
+    public Team(String name, String country) {
+        this.name = name;
+        this.country = country;
     }
 }

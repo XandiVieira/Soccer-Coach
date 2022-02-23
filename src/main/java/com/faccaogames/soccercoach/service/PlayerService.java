@@ -62,12 +62,18 @@ public class PlayerService {
     }
 
     public void transferPlayer(Long id, Long teamId) {
-        Player player = playerRepository.getById(id);
+        Player player = null;
+        if (playerRepository.existsById(id)) {
+            player = playerRepository.getById(id);
+        } else {
+            throw new ApiRequestException("Player with id " + id + " not found.");
+        }
         Team currentTeam = null;
         if (!player.getTeamId().equals(teamId)) {
             currentTeam = teamService.retrieveTeamById(player.getTeamId());
         }
-        Team team = teamService.retrieveTeamById(teamId);
+        Team team = null;
+        teamService.retrieveTeamById(teamId);
 
         doTransfer(player, teamId);
         updateTeams(currentTeam, team, player);

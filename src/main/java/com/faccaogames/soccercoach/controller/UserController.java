@@ -44,4 +44,10 @@ public class UserController {
     public Long editUser(@RequestBody User user, @PathVariable("id") final Long id) {
         return userService.updateUser(user, id);
     }
+
+    @PutMapping("/{id}/{teamId}")
+    public String assumeTeam(@PathVariable("id") final Long id, @PathVariable("teamId") final Long teamId) {
+        userService.assignNewCoach(id, teamId);
+        return "";
+    }
 }

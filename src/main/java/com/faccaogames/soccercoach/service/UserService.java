@@ -1,6 +1,7 @@
 package com.faccaogames.soccercoach.service;
 
 import com.faccaogames.soccercoach.exception.ApiRequestException;
+import com.faccaogames.soccercoach.model.Team;
 import com.faccaogames.soccercoach.model.User;
 import com.faccaogames.soccercoach.repository.UserRepository;
 import com.faccaogames.soccercoach.utils.Constants;
@@ -13,16 +14,22 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final TeamService teamService;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, TeamService teamService) {
         this.userRepository = userRepository;
+        this.teamService = teamService;
     }
 
-    public User createUser(User user) {
-        user.setId(userRepository.save(user).getId());
-        user.setCash(Constants.initialCash);
-        return user;
+    public Long createUser(User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new ApiRequestException("Nome de usuário já está sendo utilizado.");
+        } else {
+            user.setCash(Constants.initialCash);
+            user.setId(userRepository.save(user).getId());
+            return user.getId();
+        }
     }
 
     public User retrieveUserById(Long id) {
@@ -58,5 +65,15 @@ public class UserService {
         } else {
             throw new ApiRequestException("User with id " + id + " not found.");
         }
+    }
+
+    public void assignNewCoach(Long userId, Long teamId) {
+        Team team = teamService.retrieveTeamById(teamId);
+        team.setUserId(userId);
+        teamService.updateTeam(teamId, team);
+
+        User user = userRepository.getById(userId);
+        user.setCurrentTeamId(team.getId());
+        userRepository.save(user);
     }
 }
