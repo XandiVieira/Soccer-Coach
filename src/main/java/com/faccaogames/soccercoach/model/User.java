@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,8 +28,15 @@ public class User {
             generator = "user_sequence"
     )
     private Long id;
+
+    @NotBlank(message = "email must be informed.")
+    @Email
     private String email;
+
+    @NotBlank(message = "password must be informed.")
     private String password;
+
+    @NotBlank(message = "username must be informed.")
     private String username;
 
     private Long currentTeamId;

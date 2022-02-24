@@ -6,29 +6,39 @@ import com.faccaogames.soccercoach.model.User;
 import com.faccaogames.soccercoach.repository.UserRepository;
 import com.faccaogames.soccercoach.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final TeamService teamService;
 
     @Autowired
-    public UserService(UserRepository userRepository, TeamService teamService) {
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserService(UserRepository userRepository, TeamService teamService, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.teamService = teamService;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public Long createUser(User user) {
+    public User createUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new ApiRequestException("Nome de usuário já está sendo utilizado.");
         } else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setCash(Constants.initialCash);
             user.setId(userRepository.save(user).getId());
-            return user.getId();
+            return user;
         }
     }
 
@@ -75,5 +85,11 @@ public class UserService {
         User user = userRepository.getById(userId);
         user.setCurrentTeamId(team.getId());
         userRepository.save(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findUserByEmail(username).orElseThrow(() -> new ApiRequestException("Email not found."));
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), AuthorityUtils.NO_AUTHORITIES);
     }
 }
