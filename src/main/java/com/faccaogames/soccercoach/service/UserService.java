@@ -22,7 +22,7 @@ public class UserService implements UserDetailsService {
     private final TeamService teamService;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository, TeamService teamService, BCryptPasswordEncoder passwordEncoder) {
@@ -51,7 +51,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User retrieveUserByEmail(String email) {
-        Optional<User> user = userRepository.findUserByEmail(email);
+        Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             return user.get();
         } else {
@@ -88,8 +88,8 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findUserByEmail(username).orElseThrow(() -> new ApiRequestException("Email not found."));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ApiRequestException("Email not found."));
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), AuthorityUtils.NO_AUTHORITIES);
     }
 }
