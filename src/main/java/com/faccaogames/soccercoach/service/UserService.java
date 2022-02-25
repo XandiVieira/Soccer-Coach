@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -57,6 +58,10 @@ public class UserService implements UserDetailsService {
         } else {
             throw new ApiRequestException("User with email " + email + " not found.");
         }
+    }
+
+    public List<User> retrieveUsers() {
+        return userRepository.findAll();
     }
 
     public Long updateUser(User user, Long id) {

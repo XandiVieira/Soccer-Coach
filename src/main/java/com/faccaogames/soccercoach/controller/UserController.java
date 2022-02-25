@@ -1,32 +1,18 @@
 package com.faccaogames.soccercoach.controller;
 
-import com.faccaogames.soccercoach.exception.ApiRequestException;
 import com.faccaogames.soccercoach.model.User;
 import com.faccaogames.soccercoach.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
+import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping(value = "api/v1/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @PostMapping("/registration")
-    public ModelAndView createUser(@ModelAttribute @Valid User user) {
-        try {
-            userService.createUser(user);
-        } catch (ApiRequestException are) {
-            ModelAndView mav = new ModelAndView();
-            mav.addObject("message", "An account for that username/email already exists.");
-            return mav;
-        }
-        return new ModelAndView("login");
-    }
 
     @GetMapping(value = "/{id}")
     public User getUserById(@PathVariable("id") final Long id) {
@@ -34,6 +20,11 @@ public class UserController {
     }
 
     @GetMapping
+    public List<User> getUsers() {
+        return userService.retrieveUsers();
+    }
+
+    @GetMapping("/{email}")
     public User getUserByEmail(@RequestParam final String email) {
         return userService.retrieveUserByEmail(email);
     }

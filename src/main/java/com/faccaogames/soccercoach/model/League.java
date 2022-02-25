@@ -26,6 +26,7 @@ public class League {
             generator = "league_sequence"
     )
     private Long id;
+    private String name;
     private String country;
     private String logoPath;
 }
