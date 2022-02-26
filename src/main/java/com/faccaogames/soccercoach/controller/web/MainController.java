@@ -1,15 +1,16 @@
-package com.faccaogames.soccercoach.controller.thymeleaf;
+package com.faccaogames.soccercoach.controller.web;
 
-import com.faccaogames.soccercoach.exception.ApiRequestException;
+import com.faccaogames.soccercoach.exception.CustomNotFoundException;
 import com.faccaogames.soccercoach.model.User;
 import com.faccaogames.soccercoach.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
-@RestController
+@Controller
 @RequestMapping
 public class MainController {
 
@@ -20,7 +21,7 @@ public class MainController {
     public ModelAndView createUser(@ModelAttribute @Valid User user) {
         try {
             userService.createUser(user);
-        } catch (ApiRequestException are) {
+        } catch (CustomNotFoundException are) {
             ModelAndView mav = new ModelAndView();
             mav.addObject("message", "An account for that username/email already exists.");
             return mav;

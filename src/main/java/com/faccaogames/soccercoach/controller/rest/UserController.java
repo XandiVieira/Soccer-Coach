@@ -1,4 +1,4 @@
-package com.faccaogames.soccercoach.controller.restapi;
+package com.faccaogames.soccercoach.controller.rest;
 
 import com.faccaogames.soccercoach.model.User;
 import com.faccaogames.soccercoach.service.UserService;

@@ -12,10 +12,19 @@ import java.time.ZonedDateTime;
 public class ApiExceptionHandler {
 
     @ExceptionHandler(value = {
-            ApiRequestException.class
+            CustomNotFoundException.class
     })
-    public ResponseEntity<Object> notFound(ApiRequestException exception) {
+    public ResponseEntity<Object> notFound(CustomNotFoundException exception) {
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        ApiException apiException = new ApiException(exception.getMessage(), httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
+        return new ResponseEntity<>(apiException, httpStatus);
+    }
+
+    @ExceptionHandler(value = {
+            CustomAlreadyExistsException.class
+    })
+    public ResponseEntity<Object> alreadyExists(CustomAlreadyExistsException exception) {
+        HttpStatus httpStatus = HttpStatus.CONFLICT;
         ApiException apiException = new ApiException(exception.getMessage(), httpStatus, ZonedDateTime.now(ZoneId.of("Z")));
         return new ResponseEntity<>(apiException, httpStatus);
     }

@@ -1,12 +1,13 @@
 package com.faccaogames.soccercoach.service;
 
-import com.faccaogames.soccercoach.exception.ApiRequestException;
+import com.faccaogames.soccercoach.exception.CustomNotFoundException;
 import com.faccaogames.soccercoach.model.Player;
 import com.faccaogames.soccercoach.model.Team;
 import com.faccaogames.soccercoach.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -31,7 +32,7 @@ public class PlayerService {
     private void validatePlayerName(List<Player> players) {
         players.forEach(player -> {
             if (player.getFirstName().isBlank() && player.getLastName().isBlank()) {
-                throw new ApiRequestException("Player firstname or lastname must be informed.");
+                throw new CustomNotFoundException("Player firstname or lastname must be informed.");
             }
         });
     }
@@ -40,7 +41,7 @@ public class PlayerService {
         if (playerRepository.count() > 0) {
             return playerRepository.findAll();
         } else {
-            throw new ApiRequestException("No players were found.");
+            throw new CustomNotFoundException("No players were found.");
         }
     }
 
@@ -48,7 +49,7 @@ public class PlayerService {
         if (playerRepository.existsById(id)) {
             return playerRepository.getById(id);
         } else {
-            throw new ApiRequestException("Player with id " + id + " not found.");
+            throw new CustomNotFoundException("Player with id " + id + " not found.");
         }
     }
 
@@ -56,27 +57,29 @@ public class PlayerService {
         if (playerRepository.existsByTeamId(teamId)) {
             return playerRepository.getByTeamId(teamId);
         } else {
-            throw new ApiRequestException("Player does not belong to this team.");
+            throw new CustomNotFoundException("Player does not belong to this team.");
         }
     }
 
     public List<Player> updatePlayers(List<Player> players) {
         validatePlayerName(players);
-        players.forEach(player -> {
-            if (!playerRepository.existsById(player.getId())) {
-                throw new ApiRequestException("Player with id " + player.getId() + " not found.");
-            }
-        });
+        validatePlayerExistsById(players);
         return playerRepository.saveAll(players);
     }
 
+    private void validatePlayerExistsById(List<Player> players) {
+        players.forEach(player -> {
+            if (!playerRepository.existsById(player.getId())) {
+                throw new CustomNotFoundException("Player with id " + player.getId() + " not found.");
+            }
+        });
+    }
+
     public Player updatePlayer(Long id, Player player) {
-        if (playerRepository.existsById(id)) {
-            player.setId(id);
-            return playerRepository.save(player);
-        } else {
-            throw new ApiRequestException("Player with id " + id + " not found.");
-        }
+        validatePlayerName(Collections.singletonList(player));
+        validatePlayerExistsById(Collections.singletonList(player));
+        player.setId(id);
+        return playerRepository.save(player);
     }
 
     public String deletePlayer(Long id) {
@@ -84,7 +87,7 @@ public class PlayerService {
             playerRepository.deleteById(id);
             return "Player " + id + " was deleted.";
         } else {
-            throw new ApiRequestException("Player with id " + id + " not found.");
+            throw new CustomNotFoundException("Player with id " + id + " not found.");
         }
     }
 

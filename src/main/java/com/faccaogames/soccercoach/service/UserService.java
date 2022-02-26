@@ -1,6 +1,7 @@
 package com.faccaogames.soccercoach.service;
 
-import com.faccaogames.soccercoach.exception.ApiRequestException;
+import com.faccaogames.soccercoach.exception.CustomAlreadyExistsException;
+import com.faccaogames.soccercoach.exception.CustomNotFoundException;
 import com.faccaogames.soccercoach.model.Team;
 import com.faccaogames.soccercoach.model.User;
 import com.faccaogames.soccercoach.repository.UserRepository;
@@ -32,13 +33,18 @@ public class UserService implements UserDetailsService {
     }
 
     public User createUser(User user) {
-        if (userRepository.existsByUsername(user.getUsername())) {
-            throw new ApiRequestException("Username already taken");
-        } else {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setCash(Constants.initialCash);
-            user.setId(userRepository.save(user).getId());
-            return user;
+        validateUsernameAlreadyExists(user.getUsername());
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setCash(Constants.initialCash);
+        user.setId(userRepository.save(user).getId());
+        return user;
+
+    }
+
+    private void validateUsernameAlreadyExists(String username) {
+        if (userRepository.existsByUsername(username)) {
+            throw new CustomAlreadyExistsException("Username " + username + " already taken.");
         }
     }
 
@@ -46,7 +52,7 @@ public class UserService implements UserDetailsService {
         if (userRepository.count() > 0) {
             return userRepository.findAll();
         } else {
-            throw new ApiRequestException("No users were found.");
+            throw new CustomNotFoundException("No users were found.");
         }
     }
 
@@ -54,7 +60,7 @@ public class UserService implements UserDetailsService {
         if (userRepository.existsById(id)) {
             return userRepository.getById(id);
         } else {
-            throw new ApiRequestException("User with id " + id + " not found.");
+            throw new CustomNotFoundException("User with id " + id + " not found.");
         }
     }
 
@@ -63,16 +69,20 @@ public class UserService implements UserDetailsService {
         if (user.isPresent()) {
             return user.get();
         } else {
-            throw new ApiRequestException("User with email " + email + " not found.");
+            throw new CustomNotFoundException("User with email " + email + " not found.");
         }
     }
 
     public Long updateUser(User user, Long id) {
-        if (userRepository.existsById(id)) {
-            user.setId(id);
-            return userRepository.save(user).getId();
-        } else {
-            throw new ApiRequestException("User with id " + id + " not found.");
+        validateUsernameAlreadyExists(user.getUsername());
+        validateUserExistsById(id);
+        user.setId(id);
+        return userRepository.save(user).getId();
+    }
+
+    private void validateUserExistsById(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new CustomNotFoundException("User with id " + id + " not found.");
         }
     }
 
@@ -81,7 +91,7 @@ public class UserService implements UserDetailsService {
             userRepository.deleteById(id);
             return "User " + id + " was deleted.";
         } else {
-            throw new ApiRequestException("User with id " + id + " not found.");
+            throw new CustomNotFoundException("User with id " + id + " not found.");
         }
     }
 
@@ -97,7 +107,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new ApiRequestException("Email not found."));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomNotFoundException("Email not found."));
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), AuthorityUtils.NO_AUTHORITIES);
     }
 }
