@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
@@ -26,7 +27,10 @@ public class League {
             generator = "league_sequence"
     )
     private Long id;
+    @NotBlank
     private String name;
+    @NotBlank
     private String country;
+    @NotBlank
     private String logoPath;
 }

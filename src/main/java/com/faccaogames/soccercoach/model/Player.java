@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -28,13 +29,16 @@ public class Player {
     private Long id;
     private String firstName;
     private String lastName;
+    @NotBlank
     private String position;
+    @NotBlank
     private LocalDate dateOfBirth;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "skill_id", referencedColumnName = "id")
     private Skill skills;
 
+    @NotBlank
     private Long teamId;
 
     @Transient

@@ -18,12 +18,14 @@ public class LeagueService {
         this.leagueRepository = leagueRepository;
     }
 
-    public Long createLeague(League league) {
-        league.setId(leagueRepository.save(league).getId());
-        return league.getId();
+    public List<League> createLeagues(List<League> leagues) {
+        return leagueRepository.saveAll(leagues);
     }
 
-    public League retrieveLeagueById(Long id) {
+    public List<League> getAllLeagues() {
+        return leagueRepository.findAll();
+    }
+    public League getLeagueById(Long id) {
         if (leagueRepository.existsById(id)) {
             return leagueRepository.getById(id);
         } else {
@@ -31,10 +33,19 @@ public class LeagueService {
         }
     }
 
-    public Long updateLeague(Long id, League league) {
+    public List<League> updateLeagues(List<League> leagues) {
+        leagues.forEach(league -> {
+            if (!leagueRepository.existsById(league.getId())) {
+                throw new ApiRequestException("League with id " + league.getId() + " not found.");
+            }
+        });
+        return leagueRepository.saveAll(leagues);
+    }
+
+    public League updateLeague(Long id, League league) {
         if (leagueRepository.existsById(id)) {
             league.setId(id);
-            return leagueRepository.save(league).getId();
+            return leagueRepository.save(league);
         } else {
             throw new ApiRequestException("League with id " + id + " not found.");
         }
@@ -47,9 +58,5 @@ public class LeagueService {
         } else {
             throw new ApiRequestException("League with id " + id + " not found.");
         }
-    }
-
-    public List<League> retrieveAllLeagues() {
-        return leagueRepository.findAll();
     }
 }

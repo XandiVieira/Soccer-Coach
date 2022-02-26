@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -28,9 +28,13 @@ public class Team {
             generator = "player_sequence"
     )
     private Long id;
+    @NotBlank
     private String name;
+    @NotBlank
     private String country;
     private Long userId;
+    @NotBlank
+    private String imagePath;
 
     @JoinColumn(name = "player_id", referencedColumnName = "id")
     @OneToMany(cascade = CascadeType.ALL)
@@ -48,8 +52,9 @@ public class Team {
         this.userId = userId;
     }
 
-    public Team(String name, String country) {
+    public Team(String name, String country, String imagePath) {
         this.name = name;
         this.country = country;
+        this.imagePath = imagePath;
     }
 }

@@ -3,11 +3,14 @@ package com.faccaogames.soccercoach.service;
 import com.faccaogames.soccercoach.exception.ApiRequestException;
 import com.faccaogames.soccercoach.model.Player;
 import com.faccaogames.soccercoach.model.Team;
+import com.faccaogames.soccercoach.model.enums.Country;
 import com.faccaogames.soccercoach.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class TeamService {
@@ -19,11 +22,20 @@ public class TeamService {
         this.teamRepository = teamRepository;
     }
 
-    public Long createTeam(Team team) {
-        return teamRepository.save(team).getId();
+    public List<Team> createTeams(List<Team> teams) {
+        validateTeamCountry(teams);
+        return teamRepository.saveAll(teams);
     }
 
-    public List<Team> retrieveAllTeams() {
+    private void validateTeamCountry(List<Team> teams) {
+        for (Team team : teams) {
+            if (!Arrays.stream(Country.values()).toList().contains(team.getCountry().toUpperCase(Locale.ROOT))) {
+                throw new ApiRequestException("Country " + team.getCountry() + " is invalid.");
+            }
+        }
+    }
+
+    public List<Team> getAllTeams() {
         if (teamRepository.count() > 0) {
             return teamRepository.findAll();
         } else {
@@ -31,9 +43,27 @@ public class TeamService {
         }
     }
 
-    public Team retrieveTeamById(Long id) {
+    public Team getTeamById(Long id) {
         if (teamRepository.existsById(id)) {
             return teamRepository.getById(id);
+        } else {
+            throw new ApiRequestException("Team with id " + id + " not found.");
+        }
+    }
+
+    public List<Team> updateTeams(List<Team> teams) {
+        teams.forEach(team -> {
+            if (!teamRepository.existsById(team.getId())) {
+                throw new ApiRequestException("Team with id " + team.getId() + " not found.");
+            }
+        });
+        return teamRepository.saveAll(teams);
+    }
+
+    public Team updateTeam(Long id, Team team) {
+        if (teamRepository.existsById(id)) {
+            team.setId(id);
+            return teamRepository.save(team);
         } else {
             throw new ApiRequestException("Team with id " + id + " not found.");
         }
@@ -43,15 +73,6 @@ public class TeamService {
         if (teamRepository.existsById(id)) {
             teamRepository.deleteById(id);
             return "Team " + id + " was deleted.";
-        } else {
-            throw new ApiRequestException("Team with id " + id + " not found.");
-        }
-    }
-
-    public Long updateTeam(Long id, Team team) {
-        if (teamRepository.existsById(id)) {
-            team.setId(id);
-            return teamRepository.save(team).getId();
         } else {
             throw new ApiRequestException("Team with id " + id + " not found.");
         }

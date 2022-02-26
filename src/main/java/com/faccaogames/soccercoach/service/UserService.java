@@ -22,7 +22,6 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final TeamService teamService;
 
-    @Autowired
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
@@ -34,7 +33,7 @@ public class UserService implements UserDetailsService {
 
     public User createUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
-            throw new ApiRequestException("Nome de usuário já está sendo utilizado.");
+            throw new ApiRequestException("Username already taken");
         } else {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setCash(Constants.initialCash);
@@ -43,7 +42,15 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public User retrieveUserById(Long id) {
+    public List<User> getAllUsers() {
+        if (userRepository.count() > 0) {
+            return userRepository.findAll();
+        } else {
+            throw new ApiRequestException("No users were found.");
+        }
+    }
+
+    public User getUserById(Long id) {
         if (userRepository.existsById(id)) {
             return userRepository.getById(id);
         } else {
@@ -51,17 +58,13 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public User retrieveUserByEmail(String email) {
+    public User getUserByEmail(String email) {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             return user.get();
         } else {
             throw new ApiRequestException("User with email " + email + " not found.");
         }
-    }
-
-    public List<User> retrieveUsers() {
-        return userRepository.findAll();
     }
 
     public Long updateUser(User user, Long id) {
@@ -83,7 +86,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void assignNewCoach(Long userId, Long teamId) {
-        Team team = teamService.retrieveTeamById(teamId);
+        Team team = teamService.getTeamById(teamId);
         team.setUserId(userId);
         teamService.updateTeam(teamId, team);
 

@@ -1,4 +1,4 @@
-package com.faccaogames.soccercoach.controller;
+package com.faccaogames.soccercoach.controller.thymeleaf;
 
 import com.faccaogames.soccercoach.exception.ApiRequestException;
 import com.faccaogames.soccercoach.model.User;
@@ -43,7 +43,7 @@ public class MainController {
         return mav;
     }
 
-    @GetMapping("/")
+    @GetMapping("/index")
     public ModelAndView showHomePage() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("index");

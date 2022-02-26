@@ -1,10 +1,11 @@
-package com.faccaogames.soccercoach.controller;
+package com.faccaogames.soccercoach.controller.restapi;
 
 import com.faccaogames.soccercoach.model.User;
 import com.faccaogames.soccercoach.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -14,29 +15,34 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/{id}")
-    public User getUserById(@PathVariable("id") final Long id) {
-        return userService.retrieveUserById(id);
+    @PostMapping
+    public User createUser(@RequestBody @Valid User user) {
+        return userService.createUser(user);
     }
 
     @GetMapping
-    public List<User> getUsers() {
-        return userService.retrieveUsers();
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @GetMapping(value = "/{id}")
+    public User getUserById(@PathVariable("id") final Long id) {
+        return userService.getUserById(id);
     }
 
     @GetMapping("/{email}")
     public User getUserByEmail(@RequestParam final String email) {
-        return userService.retrieveUserByEmail(email);
+        return userService.getUserByEmail(email);
+    }
+
+    @PutMapping("/{id}")
+    public Long updateUser(@RequestBody User user, @PathVariable("id") final Long id) {
+        return userService.updateUser(user, id);
     }
 
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable("id") final Long id) {
         return userService.deleteUser(id);
-    }
-
-    @PutMapping("/{id}")
-    public Long editUser(@RequestBody User user, @PathVariable("id") final Long id) {
-        return userService.updateUser(user, id);
     }
 
     @PutMapping("/{id}/{teamId}")

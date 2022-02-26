@@ -21,13 +21,22 @@ public class PlayerService {
         this.teamService = teamService;
     }
 
-    public Long createPlayer(Player player) {
-        Long id = playerRepository.save(player).getId();
-        transferPlayer(player.getId(), player.getTeamId());
-        return id;
+    public List<Player> createPlayers(List<Player> players) {
+        validatePlayerName(players);
+        List<Player> savedPlayers = playerRepository.saveAll(players);
+        savedPlayers.forEach(player -> transferPlayer(player.getId(), player.getTeamId()));
+        return savedPlayers;
     }
 
-    public List<Player> retrieveAllPlayers() {
+    private void validatePlayerName(List<Player> players) {
+        players.forEach(player -> {
+            if (player.getFirstName().isBlank() && player.getLastName().isBlank()) {
+                throw new ApiRequestException("Player firstname or lastname must be informed.");
+            }
+        });
+    }
+
+    public List<Player> getAllPlayers() {
         if (playerRepository.count() > 0) {
             return playerRepository.findAll();
         } else {
@@ -35,9 +44,36 @@ public class PlayerService {
         }
     }
 
-    public Player retrievePlayerById(Long id) {
+    public Player getPlayerById(Long id) {
         if (playerRepository.existsById(id)) {
             return playerRepository.getById(id);
+        } else {
+            throw new ApiRequestException("Player with id " + id + " not found.");
+        }
+    }
+
+    public List<Player> getPlayersByTeamId(Long teamId) {
+        if (playerRepository.existsByTeamId(teamId)) {
+            return playerRepository.getByTeamId(teamId);
+        } else {
+            throw new ApiRequestException("Player does not belong to this team.");
+        }
+    }
+
+    public List<Player> updatePlayers(List<Player> players) {
+        validatePlayerName(players);
+        players.forEach(player -> {
+            if (!playerRepository.existsById(player.getId())) {
+                throw new ApiRequestException("Player with id " + player.getId() + " not found.");
+            }
+        });
+        return playerRepository.saveAll(players);
+    }
+
+    public Player updatePlayer(Long id, Player player) {
+        if (playerRepository.existsById(id)) {
+            player.setId(id);
+            return playerRepository.save(player);
         } else {
             throw new ApiRequestException("Player with id " + id + " not found.");
         }
@@ -52,39 +88,24 @@ public class PlayerService {
         }
     }
 
-    public Long updatePlayer(Long id, Player player) {
-        if (playerRepository.existsById(id)) {
-            player.setId(id);
-            return playerRepository.save(player).getId();
-        } else {
-            throw new ApiRequestException("Player with id " + id + " not found.");
-        }
-    }
-
-    public void transferPlayer(Long id, Long teamId) {
-        Player player = null;
-        if (playerRepository.existsById(id)) {
-            player = playerRepository.getById(id);
-        } else {
-            throw new ApiRequestException("Player with id " + id + " not found.");
-        }
+    public void transferPlayer(Long playerId, Long teamId) {
+        Player player = getPlayerById(playerId);
         Team currentTeam = null;
         if (!player.getTeamId().equals(teamId)) {
-            currentTeam = teamService.retrieveTeamById(player.getTeamId());
+            currentTeam = teamService.getTeamById(player.getTeamId());
         }
-        Team team = null;
-        teamService.retrieveTeamById(teamId);
+        Team team = teamService.getTeamById(teamId);
 
-        doTransfer(player, teamId);
-        updateTeams(currentTeam, team, player);
+        completeTransfer(player, teamId);
+        updateTeamsTransfer(currentTeam, team, player);
     }
 
-    private void updateTeams(Team currentTeam, Team team, Player player) {
-        teamService.updateTeamPlayers(currentTeam, team, player);
-    }
-
-    private void doTransfer(Player player, Long teamId) {
+    private void completeTransfer(Player player, Long teamId) {
         player.setTeamId(teamId);
         playerRepository.save(player);
+    }
+
+    private void updateTeamsTransfer(Team currentTeam, Team team, Player player) {
+        teamService.updateTeamPlayers(currentTeam, team, player);
     }
 }
