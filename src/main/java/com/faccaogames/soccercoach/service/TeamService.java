@@ -102,4 +102,8 @@ public class TeamService {
         }
         updateTeam(teamTo.getId(), teamTo);
     }
+
+    public List<Team> getTeamByCountry(String country) {
+        return teamRepository.getByCountry(country);
+    }
 }

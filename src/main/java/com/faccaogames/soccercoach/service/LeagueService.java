@@ -5,6 +5,9 @@ import com.faccaogames.soccercoach.exception.CustomNotFoundException;
 import com.faccaogames.soccercoach.model.League;
 import com.faccaogames.soccercoach.model.enums.Country;
 import com.faccaogames.soccercoach.repository.LeagueRepository;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Service
+@Slf4j
 public class LeagueService {
 
     private final LeagueRepository leagueRepository;
