@@ -24,11 +24,11 @@ public class PlayerService {
     }
 
     public Player getPlayerById(Long id) {
-        return new Player();
+        return feignService.getPlayerById(id);
     }
 
     public List<Player> getPlayersByTeamId(Long teamId) {
-        return new ArrayList<>();
+        return feignService.getPlayersByTeamId(teamId);
     }
 
     public List<Player> updatePlayers(List<Player> players) {
@@ -43,6 +43,7 @@ public class PlayerService {
         return new String();
     }
 
-    public void transferPlayer(Long id, long teamId) {
+    public void transferPlayer(Long playerId, long teamId) {
+        feignService.transferPlayer(playerId, teamId);
     }
 }

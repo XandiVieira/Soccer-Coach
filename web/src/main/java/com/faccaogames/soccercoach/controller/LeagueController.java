@@ -3,7 +3,10 @@ package com.faccaogames.soccercoach.controller;
 import com.faccaogames.soccercoach.model.League;
 import com.faccaogames.soccercoach.service.LeagueService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -15,15 +18,15 @@ public class LeagueController {
     @Autowired
     private LeagueService leagueService;
 
-    @PostMapping
-    public List<League> createLeagues(@RequestBody List<League> leagues) {
-        return leagueService.createLeagues(leagues);
-    }
-
     @GetMapping
     public ModelAndView getAllLeagues() {
         List<League> leagues = leagueService.getAllLeagues();
         return createModelAndView("chooseLeague", leagues);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ModelAndView getLeagueById(@PathVariable("id") final Long id) {
+        return createModelAndView("league", leagueService.getLeagueById(id));
     }
 
     private ModelAndView createModelAndView(String viewName, Object object) {
@@ -31,25 +34,5 @@ public class LeagueController {
         mav.setViewName(viewName);
         mav.addObject(object);
         return mav;
-    }
-
-    @GetMapping(value = "/{id}")
-    public League getLeagueById(@PathVariable("id") final Long id) {
-        return leagueService.getLeagueById(id);
-    }
-
-    @PutMapping
-    public List<League> updateLeagues(@RequestBody List<League> leagues) {
-        return leagueService.updateLeagues(leagues);
-    }
-
-    @PutMapping(value = "/{id}")
-    public League updateLeague(@PathVariable("id") final Long id, @RequestBody League league) {
-        return leagueService.updateLeague(id, league);
-    }
-
-    @DeleteMapping(value = "/{id}")
-    public String deleteLeague(@PathVariable("id") final Long id) {
-        return leagueService.deleteLeague(id);
     }
 }

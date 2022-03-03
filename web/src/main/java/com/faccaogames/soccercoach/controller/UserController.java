@@ -25,13 +25,6 @@ public class UserController {
         return createModelAndView("listUsers", userService.getAllUsers());
     }
 
-    private ModelAndView createModelAndView(String viewName, Object object) {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName(viewName);
-        mav.addObject(object);
-        return mav;
-    }
-
     @GetMapping(value = "/{id}")
     public User getUserById(@PathVariable("id") final Long id) {
         return userService.getUserById(id);
@@ -56,5 +49,12 @@ public class UserController {
     public String assumeTeam(@PathVariable("id") final Long id, @PathVariable("teamId") final Long teamId) {
         userService.assignNewCoach(id, teamId);
         return "";
+    }
+
+    private ModelAndView createModelAndView(String viewName, Object object) {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName(viewName);
+        mav.addObject(object);
+        return mav;
     }
 }

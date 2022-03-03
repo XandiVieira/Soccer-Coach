@@ -24,7 +24,7 @@ public class TeamService {
     }
 
     public Team getTeamById(Long id) {
-        return new Team();
+        return feignService.getTeamById(id);
     }
 
     public List<Team> updateTeams(List<Team> teams) {

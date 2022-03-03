@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class UserService implements UserDetailsService {
 
-private final FeignService feignService;
+    private final FeignService feignService;
 
     public UserService(FeignService feignService) {
         this.feignService = feignService;
@@ -23,7 +23,7 @@ private final FeignService feignService;
     }
 
     public User createUser(User user) {
-        return new User();
+        return feignService.createUser(user);
     }
 
     public List<User> getAllUsers() {
@@ -31,19 +31,19 @@ private final FeignService feignService;
     }
 
     public User getUserById(Long id) {
-        return new User();
+        return feignService.getUserById(id);
     }
 
     public User getUserByEmail(String email) {
-        return new User();
+        return feignService.getUserByEmail(email);
     }
 
     public Long updateUser(User user, Long id) {
-        return 0L;
+        return feignService.updateUser(user, id);
     }
 
     public String deleteUser(Long id) {
-        return new String();
+        return feignService.deleteUser(id);
     }
 
     public void assignNewCoach(Long id, Long teamId) {

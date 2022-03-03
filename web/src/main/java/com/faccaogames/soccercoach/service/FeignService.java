@@ -28,9 +28,33 @@ public class FeignService {
         }
     }
 
+    public League getLeagueById(Long id) {
+        try {
+            return soccerCoachClient.getLeagueById(id);
+        } catch (FeignException fe) {
+            throw new CustomAlreadyExistsException(fe.getMessage());
+        }
+    }
+
     public List<Player> getPlayers() {
         try {
             return soccerCoachClient.getPlayers();
+        } catch (FeignException fe) {
+            throw new CustomAlreadyExistsException(fe.getMessage());
+        }
+    }
+
+    public Player getPlayerById(Long id) {
+        try {
+            return soccerCoachClient.getPlayerById(id);
+        } catch (FeignException fe) {
+            throw new CustomAlreadyExistsException(fe.getMessage());
+        }
+    }
+
+    public List<Player> getPlayersByTeamId(Long teamId) {
+        try {
+            return soccerCoachClient.getPlayersByTeamId(teamId);
         } catch (FeignException fe) {
             throw new CustomAlreadyExistsException(fe.getMessage());
         }
@@ -44,9 +68,65 @@ public class FeignService {
         }
     }
 
+    public Team getTeamById(Long id) {
+        try {
+            return soccerCoachClient.getTeamById(id);
+        } catch (FeignException fe) {
+            throw new CustomAlreadyExistsException(fe.getMessage());
+        }
+    }
+
+    public void transferPlayer(Long playerId, long teamId) {
+        try {
+            soccerCoachClient.transferPlayer(playerId, teamId);
+        } catch (FeignException fe) {
+            throw new CustomAlreadyExistsException(fe.getMessage());
+        }
+    }
+
     public List<User> getUsers() {
         try {
             return soccerCoachClient.getUsers();
+        } catch (FeignException fe) {
+            throw new CustomAlreadyExistsException(fe.getMessage());
+        }
+    }
+
+    public User createUser(User user) {
+        try {
+            return soccerCoachClient.createUser(user);
+        } catch (FeignException fe) {
+            throw new CustomAlreadyExistsException(fe.getMessage());
+        }
+    }
+
+    public User getUserById(Long id) {
+        try {
+            return soccerCoachClient.getUserById(id);
+        } catch (FeignException fe) {
+            throw new CustomAlreadyExistsException(fe.getMessage());
+        }
+    }
+
+    public User getUserByEmail(String email) {
+        try {
+            return soccerCoachClient.getUserByEmail(email);
+        } catch (FeignException fe) {
+            throw new CustomAlreadyExistsException(fe.getMessage());
+        }
+    }
+
+    public Long updateUser(User user, Long id) {
+        try {
+            return soccerCoachClient.updateUser(user, id);
+        } catch (FeignException fe) {
+            throw new CustomAlreadyExistsException(fe.getMessage());
+        }
+    }
+
+    public String deleteUser(Long id) {
+        try {
+            return soccerCoachClient.deleteUser(id);
         } catch (FeignException fe) {
             throw new CustomAlreadyExistsException(fe.getMessage());
         }
