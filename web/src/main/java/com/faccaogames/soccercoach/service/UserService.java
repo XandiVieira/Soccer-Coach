@@ -46,6 +46,7 @@ public class UserService implements UserDetailsService {
         return feignService.deleteUser(id);
     }
 
-    public void assignNewCoach(Long id, Long teamId) {
+    public void assignNewCoach(Long userId, Long teamId) {
+        feignService.assignNewCoach(userId, teamId);
     }
 }

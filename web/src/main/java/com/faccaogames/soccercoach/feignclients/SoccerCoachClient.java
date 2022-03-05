@@ -54,4 +54,7 @@ public interface SoccerCoachClient {
 
     @DeleteMapping(value = "/user/{id}", produces = "application/json")
     String deleteUser(@PathVariable("id") Long id);
+
+    @PutMapping(value = "/user/{id}/{teamId}", produces = "application/json")
+    void assignNewCoach(@PathVariable("id") Long userId, @PathVariable("teamId") Long teamId);
 }

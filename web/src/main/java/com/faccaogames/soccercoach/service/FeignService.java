@@ -131,4 +131,12 @@ public class FeignService {
             throw new CustomAlreadyExistsException(fe.getMessage());
         }
     }
+
+    public void assignNewCoach(Long userId, Long teamId) {
+        try {
+            soccerCoachClient.assignNewCoach(userId, teamId);
+        } catch (FeignException fe) {
+            throw new CustomAlreadyExistsException(fe.getMessage());
+        }
+    }
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -16,6 +17,6 @@ public class Team {
     private String country;
     private Long userId;
     private String imagePath;
-    private Double money;
+    private BigDecimal money;
     private Set<Match> matches;
 }

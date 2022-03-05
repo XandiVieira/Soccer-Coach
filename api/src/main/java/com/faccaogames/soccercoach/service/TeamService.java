@@ -1,13 +1,13 @@
 package com.faccaogames.soccercoach.service;
 
-import com.faccaogames.soccercoach.model.Player;
-import com.faccaogames.soccercoach.model.enums.Country;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.faccaogames.soccercoach.exception.CustomAlreadyExistsException;
 import com.faccaogames.soccercoach.exception.CustomNotFoundException;
+import com.faccaogames.soccercoach.model.Player;
 import com.faccaogames.soccercoach.model.Team;
+import com.faccaogames.soccercoach.model.enums.Country;
 import com.faccaogames.soccercoach.repository.TeamRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,10 +18,12 @@ import java.util.Locale;
 public class TeamService {
 
     private final TeamRepository teamRepository;
+    private final PlayerService playerService;
 
     @Autowired
-    public TeamService(TeamRepository teamRepository) {
+    public TeamService(TeamRepository teamRepository, PlayerService playerService) {
         this.teamRepository = teamRepository;
+        this.playerService = playerService;
     }
 
     public List<Team> createTeams(List<Team> teams) {
@@ -105,5 +107,9 @@ public class TeamService {
 
     public List<Team> getTeamByCountry(String country) {
         return teamRepository.getByCountry(country);
+    }
+
+    public List<Player> getTeamPlayers(Long teamId) {
+        return playerService.getPlayersByTeamId(teamId);
     }
 }

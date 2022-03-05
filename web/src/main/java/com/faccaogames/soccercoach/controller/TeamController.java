@@ -28,6 +28,11 @@ public class TeamController {
         return createModelAndView("team", teamService.updateTeam(id, team));
     }
 
+    @GetMapping
+    public ModelAndView getTeamPlayers(@PathVariable("id") final Long id){
+        return createModelAndView("teamPlayersList", teamService.getTeamPlayers(id));
+    }
+
     private ModelAndView createModelAndView(String viewName, Object object) {
         ModelAndView mav = new ModelAndView();
         mav.setViewName(viewName);
