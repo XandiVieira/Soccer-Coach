@@ -44,9 +44,4 @@ public class TeamController {
     public String deleteTeam(@PathVariable("id") final Long id) {
         return teamService.deleteTeam(id);
     }
-
-    @GetMapping(value = "/{id}/listPlayers")
-    public List<Player> listTeamPlayers(@PathVariable("teamId") final Long teamId){
-        return teamService.getTeamPlayers(teamId);
-    }
 }

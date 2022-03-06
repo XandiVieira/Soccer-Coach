@@ -1,6 +1,5 @@
 package com.faccaogames.soccercoach.service;
 
-import com.faccaogames.soccercoach.model.Player;
 import com.faccaogames.soccercoach.model.Team;
 import org.springframework.stereotype.Service;
 
@@ -38,9 +37,5 @@ public class TeamService {
 
     public String deleteTeam(Long id) {
         return new String();
-    }
-
-    public List<Player> getTeamPlayers(Long id) {
-        return feignService.getPlayersByTeamId(id);
     }
 }
