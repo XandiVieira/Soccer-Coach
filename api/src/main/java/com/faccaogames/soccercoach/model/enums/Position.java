@@ -1,11 +1,12 @@
 package com.faccaogames.soccercoach.model.enums;
 
 public enum Position {
-    GOLEIRO,
-    LATERAL_DIREITO,
-    LATERAL_ESQUERDO,
-    ZAGUEIRO,
-    VOLANTE,
-    MEIA,
-    ATACANTE
+    GOALKEEPER,
+    CENTER_BACK,
+    RIGHT_BACK,
+    LEFT_BACK,
+    DEFENSIVE_MID,
+    OFFENSIVE_MID,
+    STRIKER,
+    CENTER_FORWARD
 }

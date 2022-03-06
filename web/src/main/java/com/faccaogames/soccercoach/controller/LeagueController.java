@@ -29,6 +29,11 @@ public class LeagueController {
         return createModelAndView("league", leagueService.getLeagueById(id));
     }
 
+    @GetMapping(value = "/{continent}")
+    public ModelAndView getLeagueByContinent(@PathVariable("continent") final String continent) {
+        return createModelAndView("league", leagueService.getLeagueByContinent(continent));
+    }
+
     private ModelAndView createModelAndView(String viewName, Object object) {
         ModelAndView mav = new ModelAndView();
         mav.setViewName(viewName);

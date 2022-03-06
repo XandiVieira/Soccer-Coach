@@ -12,5 +12,6 @@ public class League {
     private Long id;
     private String name;
     private String country;
+    private String continent;
     private String logoPath;
 }

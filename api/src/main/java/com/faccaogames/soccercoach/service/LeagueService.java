@@ -2,11 +2,12 @@ package com.faccaogames.soccercoach.service;
 
 import com.faccaogames.soccercoach.exception.CustomAlreadyExistsException;
 import com.faccaogames.soccercoach.exception.CustomNotFoundException;
+import com.faccaogames.soccercoach.model.League;
+import com.faccaogames.soccercoach.model.enums.Continent;
 import com.faccaogames.soccercoach.model.enums.Country;
 import com.faccaogames.soccercoach.repository.LeagueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.faccaogames.soccercoach.model.League;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -25,14 +26,23 @@ public class LeagueService {
 
     public List<League> createLeagues(List<League> leagues) {
         validateLeagueCountry(leagues);
+        validateLeagueContinent(leagues);
         validateLeagueAlreadyExistsByNameAndCountry(leagues);
         return leagueRepository.saveAll(leagues);
     }
 
     private void validateLeagueCountry(List<League> leagues) {
         for (League league : leagues) {
-            if (!Arrays.stream(Country.values()).toList().contains(league.getCountry().toUpperCase(Locale.ROOT))) {
+            if (!Arrays.stream(Country.values()).toList().stream().map(Enum::name).toList().contains(league.getCountry().toUpperCase(Locale.ROOT))) {
                 throw new CustomNotFoundException("Country " + league.getCountry() + " is invalid.");
+            }
+        }
+    }
+
+    private void validateLeagueContinent(List<League> leagues) {
+        for (League league : leagues) {
+            if (!Arrays.stream(Continent.values()).toList().stream().map(Enum::name).toList().contains(league.getContinent().toUpperCase(Locale.ROOT))) {
+                throw new CustomNotFoundException("Continent " + league.getContinent() + " is invalid.");
             }
         }
     }
@@ -57,8 +67,17 @@ public class LeagueService {
         }
     }
 
+    public List<League> getLeagueByContinent(String continent) {
+        if (leagueRepository.existsByContinent(continent)) {
+            return leagueRepository.findByContinent(continent);
+        } else {
+            throw new CustomNotFoundException("League with continent " + continent + " not found.");
+        }
+    }
+
     public List<League> updateLeagues(List<League> leagues) {
         validateLeagueCountry(leagues);
+        validateLeagueContinent(leagues);
         validateLeagueAlreadyExistsByNameAndCountry(leagues);
         validateLeagueExistsById(leagues);
         return leagueRepository.saveAll(leagues);
@@ -74,6 +93,7 @@ public class LeagueService {
 
     public League updateLeague(Long id, League league) {
         validateLeagueCountry(Collections.singletonList(league));
+        validateLeagueContinent(Collections.singletonList(league));
         validateLeagueAlreadyExistsByNameAndCountry(Collections.singletonList(league));
         validateLeagueExistsById(Collections.singletonList(league));
         league.setId(id);

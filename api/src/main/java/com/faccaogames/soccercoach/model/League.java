@@ -32,5 +32,7 @@ public class League {
     @NotBlank
     private String country;
     @NotBlank
+    private String continent;
+    @NotBlank
     private String logoPath;
 }

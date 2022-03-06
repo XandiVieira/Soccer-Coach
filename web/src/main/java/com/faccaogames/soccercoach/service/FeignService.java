@@ -36,6 +36,14 @@ public class FeignService {
         }
     }
 
+    public List<League> getLeagueByContinent(String continent) {
+        try {
+            return soccerCoachClient.getLeagueByContinent(continent);
+        } catch (FeignException fe) {
+            throw new CustomAlreadyExistsException(fe.getMessage());
+        }
+    }
+
     public List<Player> getPlayers() {
         try {
             return soccerCoachClient.getPlayers();
@@ -135,6 +143,14 @@ public class FeignService {
     public void assignNewCoach(Long userId, Long teamId) {
         try {
             soccerCoachClient.assignNewCoach(userId, teamId);
+        } catch (FeignException fe) {
+            throw new CustomAlreadyExistsException(fe.getMessage());
+        }
+    }
+
+    public List<String> getContinents() {
+        try {
+            return soccerCoachClient.getContinents();
         } catch (FeignException fe) {
             throw new CustomAlreadyExistsException(fe.getMessage());
         }

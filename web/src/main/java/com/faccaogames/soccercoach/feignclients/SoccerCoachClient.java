@@ -19,6 +19,9 @@ public interface SoccerCoachClient {
     @GetMapping(value = "/league/{id}", produces = "application/json")
     League getLeagueById(@PathVariable("id") Long id);
 
+    @GetMapping(value = "/league/{continent}", produces = "application/json")
+    List<League> getLeagueByContinent(String continent);
+
     @GetMapping(value = "/team", produces = "application/json")
     List<Team> getTeams();
 
@@ -57,4 +60,7 @@ public interface SoccerCoachClient {
 
     @PutMapping(value = "/user/{id}/{teamId}", produces = "application/json")
     void assignNewCoach(@PathVariable("id") Long userId, @PathVariable("teamId") Long teamId);
+
+    @GetMapping(value = "/continent", produces = "application/json")
+    List<String> getContinents();
 }

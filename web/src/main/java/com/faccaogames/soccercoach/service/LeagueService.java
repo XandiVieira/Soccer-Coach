@@ -21,4 +21,8 @@ public class LeagueService {
     public League getLeagueById(Long id) {
         return feignService.getLeagueById(id);
     }
+
+    public List<League> getLeagueByContinent(String continent) {
+        return feignService.getLeagueByContinent(continent);
+    }
 }
