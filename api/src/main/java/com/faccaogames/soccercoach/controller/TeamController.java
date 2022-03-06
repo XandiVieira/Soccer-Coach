@@ -1,6 +1,5 @@
 package com.faccaogames.soccercoach.controller;
 
-import com.faccaogames.soccercoach.model.Player;
 import com.faccaogames.soccercoach.model.Team;
 import com.faccaogames.soccercoach.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,10 +42,5 @@ public class TeamController {
     @DeleteMapping(value = "/{id}")
     public String deleteTeam(@PathVariable("id") final Long id) {
         return teamService.deleteTeam(id);
-    }
-
-    @GetMapping(value = "/{id}/listPlayers")
-    public List<Player> listTeamPlayers(@PathVariable("teamId") final Long teamId){
-        return teamService.getTeamPlayers(teamId);
     }
 }

@@ -1,17 +1,9 @@
 package com.faccaogames.soccercoach.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-public class Player {
+public class Player extends BaseModel {
 
-    private Long id;
     private String firstName;
     private String lastName;
     private String position;

@@ -18,12 +18,10 @@ import java.util.Locale;
 public class TeamService {
 
     private final TeamRepository teamRepository;
-    private final PlayerService playerService;
 
     @Autowired
-    public TeamService(TeamRepository teamRepository, PlayerService playerService) {
+    public TeamService(TeamRepository teamRepository) {
         this.teamRepository = teamRepository;
-        this.playerService = playerService;
     }
 
     public List<Team> createTeams(List<Team> teams) {
@@ -107,9 +105,5 @@ public class TeamService {
 
     public List<Team> getTeamByCountry(String country) {
         return teamRepository.getByCountry(country);
-    }
-
-    public List<Player> getTeamPlayers(Long teamId) {
-        return playerService.getPlayersByTeamId(teamId);
     }
 }

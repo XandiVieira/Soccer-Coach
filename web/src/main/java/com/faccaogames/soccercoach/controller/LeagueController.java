@@ -6,14 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-@RestController
 @RequestMapping(path = "api/v1/league")
-public class LeagueController {
+public class LeagueController extends BaseController {
 
     @Autowired
     private LeagueService leagueService;
@@ -27,12 +25,5 @@ public class LeagueController {
     @GetMapping(value = "/{id}")
     public ModelAndView getLeagueById(@PathVariable("id") final Long id) {
         return createModelAndView("league", leagueService.getLeagueById(id));
-    }
-
-    private ModelAndView createModelAndView(String viewName, Object object) {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName(viewName);
-        mav.addObject(object);
-        return mav;
     }
 }

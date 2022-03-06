@@ -1,17 +1,15 @@
 package com.faccaogames.soccercoach.service;
 
 import com.faccaogames.soccercoach.model.League;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-@Service
-public class LeagueService {
+public class LeagueService extends BaseService {
 
-    private final FeignService feignService;
-
+    @Autowired
     public LeagueService(FeignService feignService) {
-        this.feignService = feignService;
+        super(feignService);
     }
 
     public List<League> getAllLeagues() {

@@ -1,18 +1,16 @@
 package com.faccaogames.soccercoach.service;
 
 import com.faccaogames.soccercoach.model.Player;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class PlayerService {
+public class PlayerService extends BaseService {
 
-    private final FeignService feignService;
-
+    @Autowired
     public PlayerService(FeignService feignService) {
-        this.feignService = feignService;
+        super(feignService);
     }
 
     public List<Player> createPlayers(List<Player> players) {

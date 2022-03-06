@@ -8,9 +8,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
-@RestController
 @RequestMapping(value = "api/v1/user")
-public class UserController {
+public class UserController extends BaseController {
 
     @Autowired
     private UserService userService;
@@ -49,12 +48,5 @@ public class UserController {
     public String assumeTeam(@PathVariable("id") final Long id, @PathVariable("teamId") final Long teamId) {
         userService.assignNewCoach(id, teamId);
         return "";
-    }
-
-    private ModelAndView createModelAndView(String viewName, Object object) {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName(viewName);
-        mav.addObject(object);
-        return mav;
     }
 }

@@ -2,12 +2,14 @@ package com.faccaogames.soccercoach.controller;
 
 import com.faccaogames.soccercoach.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-@RestController
 @RequestMapping(path = "api/v1/player")
-public class PlayerController {
+public class PlayerController extends BaseController {
 
     @Autowired
     private PlayerService playerService;
@@ -30,12 +32,5 @@ public class PlayerController {
     @PutMapping(value = "/{id}/{teamId}")
     public void transferPlayer(@PathVariable("id") final Long id, @PathVariable("teamId") final long teamId) {
         playerService.transferPlayer(id, teamId);
-    }
-
-    private ModelAndView createModelAndView(String viewName, Object object) {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName(viewName);
-        mav.addObject(object);
-        return mav;
     }
 }

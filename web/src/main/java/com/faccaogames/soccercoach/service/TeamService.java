@@ -1,19 +1,16 @@
 package com.faccaogames.soccercoach.service;
 
-import com.faccaogames.soccercoach.model.Player;
 import com.faccaogames.soccercoach.model.Team;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class TeamService {
+public class TeamService extends BaseService {
 
-    private final FeignService feignService;
-
+    @Autowired
     public TeamService(FeignService feignService) {
-        this.feignService = feignService;
+        super(feignService);
     }
 
     public List<Team> createTeams(List<Team> teams) {
@@ -38,9 +35,5 @@ public class TeamService {
 
     public String deleteTeam(Long id) {
         return new String();
-    }
-
-    public List<Player> getTeamPlayers(Long id) {
-        return feignService.getPlayersByTeamId(id);
     }
 }

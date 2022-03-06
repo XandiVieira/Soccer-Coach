@@ -6,9 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-@RestController
 @RequestMapping(path = "api/v1/team")
-public class TeamController {
+public class TeamController extends BaseController {
 
     @Autowired
     private TeamService teamService;
@@ -26,17 +25,5 @@ public class TeamController {
     @PutMapping(value = "/{id}")
     public ModelAndView updateTeam(@PathVariable("id") final Long id, @RequestBody Team team) {
         return createModelAndView("team", teamService.updateTeam(id, team));
-    }
-
-    @GetMapping
-    public ModelAndView getTeamPlayers(@PathVariable("id") final Long id){
-        return createModelAndView("teamPlayersList", teamService.getTeamPlayers(id));
-    }
-
-    private ModelAndView createModelAndView(String viewName, Object object) {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName(viewName);
-        mav.addObject(object);
-        return mav;
     }
 }
