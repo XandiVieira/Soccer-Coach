@@ -1,0 +1,14 @@
+server:
+  contextPath: /
+  port: 8081
+
+# Config FEIGN
+soccerCoach.feign.url: localhost:8080/api/v1
+soccerCoach.feign.name: soccercoach-api
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 1000
+        readTimeout: 6000
+        loggerLevel: basic
