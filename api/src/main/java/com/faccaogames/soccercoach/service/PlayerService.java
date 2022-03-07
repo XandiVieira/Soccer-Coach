@@ -1,12 +1,15 @@
 package com.faccaogames.soccercoach.service;
 
 import com.faccaogames.soccercoach.exception.CustomNotFoundException;
+import com.faccaogames.soccercoach.exception.CustomNotValidException;
 import com.faccaogames.soccercoach.model.Player;
 import com.faccaogames.soccercoach.model.Team;
+import com.faccaogames.soccercoach.model.enums.Position;
 import com.faccaogames.soccercoach.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -24,15 +27,24 @@ public class PlayerService {
 
     public List<Player> createPlayers(List<Player> players) {
         validatePlayerName(players);
+        validatePlayerPosition(players);
         List<Player> savedPlayers = playerRepository.saveAll(players);
         savedPlayers.forEach(player -> transferPlayer(player.getId(), player.getTeamId()));
         return savedPlayers;
     }
 
+    private void validatePlayerPosition(List<Player> players) {
+        players.forEach(player -> {
+            if (Arrays.stream(Position.values()).toList().stream().map(Enum::name).toList().contains(player.getPosition().toUpperCase())) {
+                throw new CustomNotValidException(player.getPosition() + " is not a valid position.");
+            }
+        });
+    }
+
     private void validatePlayerName(List<Player> players) {
         players.forEach(player -> {
             if (player.getFirstName().isBlank() && player.getLastName().isBlank()) {
-                throw new CustomNotFoundException("Player firstname or lastname must be informed.");
+                throw new CustomNotValidException("Player firstname or lastname must be informed.");
             }
         });
     }
@@ -63,6 +75,7 @@ public class PlayerService {
 
     public List<Player> updatePlayers(List<Player> players) {
         validatePlayerName(players);
+        validatePlayerPosition(players);
         validatePlayerExistsById(players);
         return playerRepository.saveAll(players);
     }

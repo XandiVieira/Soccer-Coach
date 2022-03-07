@@ -2,6 +2,7 @@ package com.faccaogames.soccercoach.service;
 
 import com.faccaogames.soccercoach.exception.CustomAlreadyExistsException;
 import com.faccaogames.soccercoach.exception.CustomNotFoundException;
+import com.faccaogames.soccercoach.exception.CustomNotValidException;
 import com.faccaogames.soccercoach.model.Player;
 import com.faccaogames.soccercoach.model.Team;
 import com.faccaogames.soccercoach.model.enums.Country;
@@ -40,8 +41,8 @@ public class TeamService {
 
     private void validateTeamCountry(List<Team> teams) {
         for (Team team : teams) {
-            if (!Arrays.stream(Country.values()).toList().contains(team.getCountry().toUpperCase(Locale.ROOT))) {
-                throw new CustomNotFoundException("Country " + team.getCountry() + " is invalid.");
+            if (!Arrays.stream(Country.values()).toList().stream().map(Enum::name).toList().contains(team.getCountry().toUpperCase(Locale.ROOT))) {
+                throw new CustomNotValidException("Country " + team.getCountry() + " is invalid.");
             }
         }
     }

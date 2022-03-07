@@ -2,6 +2,7 @@ package com.faccaogames.soccercoach.service;
 
 import com.faccaogames.soccercoach.exception.CustomAlreadyExistsException;
 import com.faccaogames.soccercoach.exception.CustomNotFoundException;
+import com.faccaogames.soccercoach.exception.CustomNotValidException;
 import com.faccaogames.soccercoach.model.League;
 import com.faccaogames.soccercoach.model.enums.Continent;
 import com.faccaogames.soccercoach.model.enums.Country;
@@ -34,7 +35,7 @@ public class LeagueService {
     private void validateLeagueCountry(List<League> leagues) {
         for (League league : leagues) {
             if (!Arrays.stream(Country.values()).toList().stream().map(Enum::name).toList().contains(league.getCountry().toUpperCase(Locale.ROOT))) {
-                throw new CustomNotFoundException("Country " + league.getCountry() + " is invalid.");
+                throw new CustomNotValidException("Country " + league.getCountry() + " is invalid.");
             }
         }
     }
@@ -42,7 +43,7 @@ public class LeagueService {
     private void validateLeagueContinent(List<League> leagues) {
         for (League league : leagues) {
             if (!Arrays.stream(Continent.values()).toList().stream().map(Enum::name).toList().contains(league.getContinent().toUpperCase(Locale.ROOT))) {
-                throw new CustomNotFoundException("Continent " + league.getContinent() + " is invalid.");
+                throw new CustomNotValidException("Continent " + league.getContinent() + " is invalid.");
             }
         }
     }
