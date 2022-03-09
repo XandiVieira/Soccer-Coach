@@ -2,7 +2,7 @@ package com.faccaogames.soccercoach.model.enums;
 
 public enum Country {
     BRAZIL,
-    GERMAN,
+    GERMANY,
     FRANCE,
     ITALY,
     PORTUGAL,

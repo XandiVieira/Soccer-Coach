@@ -31,7 +31,7 @@ public class LeagueController {
 
     @GetMapping(value = "/{continent}")
     public List<League> getLeagueByContinent(@PathVariable("continent") final String continent) {
-        return leagueService.getLeagueByContinent(continent);
+        return leagueService.getLeaguesByContinent(continent);
     }
 
     @PutMapping
