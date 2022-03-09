@@ -32,7 +32,7 @@ public class LeagueService {
         return leagueRepository.saveAll(leagues);
     }
 
-    private void validateLeagueCountry(List<League> leagues) {
+    public void validateLeagueCountry(List<League> leagues) {
         for (League league : leagues) {
             if (!Arrays.stream(Country.values()).toList().stream().map(Enum::name).toList().contains(league.getCountry().toUpperCase(Locale.ROOT))) {
                 throw new CustomNotValidException("Country " + league.getCountry() + " is invalid.");
@@ -40,7 +40,7 @@ public class LeagueService {
         }
     }
 
-    private void validateLeagueContinent(List<League> leagues) {
+    public void validateLeagueContinent(List<League> leagues) {
         for (League league : leagues) {
             if (!Arrays.stream(Continent.values()).toList().stream().map(Enum::name).toList().contains(league.getContinent().toUpperCase(Locale.ROOT))) {
                 throw new CustomNotValidException("Continent " + league.getContinent() + " is invalid.");
@@ -48,7 +48,7 @@ public class LeagueService {
         }
     }
 
-    private void validateLeagueAlreadyExistsByNameAndCountry(List<League> leagues) {
+    public void validateLeagueAlreadyExistsByNameAndCountry(List<League> leagues) {
         leagues.forEach(league -> {
             if (leagueRepository.existsByNameAndCountry(league.getName(), league.getCountry())) {
                 throw new CustomAlreadyExistsException("League " + league.getName() + " already exists in " + league.getCountry());
@@ -68,7 +68,7 @@ public class LeagueService {
         }
     }
 
-    public List<League> getLeagueByContinent(String continent) {
+    public List<League> getLeaguesByContinent(String continent) {
         if (leagueRepository.existsByContinent(continent)) {
             return leagueRepository.findByContinent(continent);
         } else {
@@ -84,7 +84,7 @@ public class LeagueService {
         return leagueRepository.saveAll(leagues);
     }
 
-    private void validateLeagueExistsById(List<League> leagues) {
+    public void validateLeagueExistsById(List<League> leagues) {
         leagues.forEach(league -> {
             if (!leagueRepository.existsById(league.getId())) {
                 throw new CustomNotFoundException("League with id " + league.getId() + " not found.");
