@@ -1,6 +1,5 @@
 package com.faccaogames.soccercoach.service;
 
-import com.faccaogames.soccercoach.model.League;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,4 +16,4 @@ public class ContinentService {
     public List<String> getAllContinents() {
         return feignService.getContinents();
     }
- }
+}

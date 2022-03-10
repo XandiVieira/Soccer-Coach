@@ -1,6 +1,7 @@
 package com.faccaogames.soccercoach.controller;
 
 import com.faccaogames.soccercoach.model.League;
+import com.faccaogames.soccercoach.service.ContinentService;
 import com.faccaogames.soccercoach.service.LeagueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,10 +19,16 @@ public class LeagueController {
     @Autowired
     private LeagueService leagueService;
 
+    @Autowired
+    ContinentService continentService;
+
     @GetMapping
     public ModelAndView getAllLeagues() {
         List<League> leagues = leagueService.getAllLeagues();
-        return createModelAndView("chooseLeague", leagues);
+
+        ModelAndView mav = createModelAndView("chooseLeague", leagues);
+        mav.addObject("continents", continentService.getAllContinents());
+        return mav;
     }
 
     @GetMapping(value = "/{id}")

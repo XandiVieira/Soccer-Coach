@@ -11,11 +11,12 @@
         <module name="soccercoach-api" />
         <module name="Soccer-Coach" />
         <module name="soccercoach-web" />
+        <module name="soccercoach" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="api" target="17" />
-      <module name="soccercoach" target="1.5" />
+      <module name="soccercoach" target="17" />
       <module name="web" target="17" />
     </bytecodeTargetLevel>
   </component>
