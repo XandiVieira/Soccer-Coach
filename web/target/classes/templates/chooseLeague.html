@@ -1,10 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Leagues</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#btn1").click(function () {
+                $("#recebe").append("  <div class=\"card offset-md-1 \" style=\"width: 16rem; margin-top: 60px   \" th:each=\"league : ${leagues}\">\n" +
+                    "        <img th:src=\"@{'/images/'  + ${league.logoPath}}\" th:title=\"#{logo}\" th:alt=\"#{logo}\"/>\n" +
+                    "        <div class=\"card-body\">\n" +
+                    "            <h5 class=\"card-title\" th:text=\"${league.name}\"></h5>\n" +
+                    "            <p class=\"card-text\" th:text=\"${league.country}\"></p>\n" +
+                    "            <a href=\"#\" class=\"btn btn-primary\">Select league</a>\n" +
+                    "        </div>\n" +
+                    "    </div>");
+            });
+
+        });
+
+    </script>
+
 </head>
-<body>
-<h1>LEAGUES</h1>
+
+<body style="background-image: url('/static/images/fundoP1.jpg');">
+
+<div style="background-color: #26264c;" class="container-fluid   fixed-top  text-center text-white">
+    <div>
+        <h3>Soccer menager</h3>
+        <button style="float: right; margin: -35px 0 5px 0" type="button" class="btn btn-primary ">Profile</button>
+    </div>
+    <div style="margin-top: " class="">
+        <div style="background-color: #26264c" class="row text-white  ">
+            <div class="col-md-2">
+                <span class="text-white ">Leagues</span>
+            </div>
+            <div class="col-md-4 ">
+                <span>Times</span></div>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top: 65px" class="">
+    <div style="height: 100vh; background: #26264c;overflow-y: scroll" class="position-fixed  col-md-2">
+        <div class="card" style="width: 14rem; margin-top: 60px" th:each="league : ${leagues}">
+            <img th:src="@{'/images/'  + ${league.logoPath}}" th:title="#{logo}" th:alt="#{logo}"/>
+            <div class="card-body">
+                <h5 class="card-title" th:text="${league.name}"></h5>
+                <p class="card-text" th:text="${league.country}"></p>
+                <a href="#" class="btn btn-primary">Select league</a>
+                <button id="btn1">Append text</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row offset-md-2 " id="recebe">
+
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
 </body>
 </html>

@@ -26,7 +26,7 @@ public class LeagueController {
     public ModelAndView getAllLeagues() {
         List<League> leagues = leagueService.getAllLeagues();
 
-        ModelAndView mav = createModelAndView("chooseLeague", leagues);
+        ModelAndView mav = createModelAndView("leagues", leagues);
         mav.addObject("continents", continentService.getAllContinents());
         return mav;
     }
@@ -41,10 +41,9 @@ public class LeagueController {
         return createModelAndView("league", leagueService.getLeagueByContinent(continent));
     }
 
-    private ModelAndView createModelAndView(String viewName, Object object) {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName(viewName);
-        mav.addObject(object);
+    private ModelAndView createModelAndView(String objectName, Object object) {
+        ModelAndView mav = new ModelAndView("chooseLeague");
+        mav.addObject(objectName, object);
         return mav;
     }
 }
